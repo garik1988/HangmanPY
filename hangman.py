@@ -73,7 +73,7 @@ def hideword(word,guesses): #generates string with the guessed letters and the r
     
     word=word.replace("'", "") #removes "'" character from randomnly generated string
     
-    hiddenword="_ "*len(word) #generates a string a hidden version of random word in form of "_ _ _ _ _"
+    hiddenword="_ "*len(word) #generates  a hidden version of random word in form of "_ _ _ _ _"
 
     hiddenword=hiddenword.split()
 
