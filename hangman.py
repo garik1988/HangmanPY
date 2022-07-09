@@ -1,3 +1,4 @@
+from random import random
 from random_word import RandomWords
 
 def hagmanpic(pic):  #returns ascii graphic of hangman by number of wrong guesses
@@ -62,18 +63,26 @@ def hagmanpic(pic):  #returns ascii graphic of hangman by number of wrong guesse
   return HANGMANPICS[pic]
 
 def wordgen(): #returns random word
-    word = RandomWords()
     
-    word=word.get_random_word()
+    wordgenerator = RandomWords()
     
-    return (word)
+    randomword = None
+    
+    while randomword == None: #tries untill api returns a random word
+      
+      randomword = wordgenerator.get_random_word()
+    
+
+    
+    return (randomword)
 
 def hideword(word,guesses): #generates string with the guessed letters and the remaining ones in form of "_"
+    
     word=word.replace("-", "") #removes "-" character from randomnly generated string
     
     word=word.replace("'", "") #removes "'" character from randomnly generated string
     
-    hiddenword="_ "*len(word) #generates  a hidden version of random word in form of "_ _ _ _ _"
+    hiddenword="_ "*len(word) #generates a string of hidden version of random word in form of "_ _ _ _ _"
 
     hiddenword=hiddenword.split()
 
@@ -84,14 +93,12 @@ def hideword(word,guesses): #generates string with the guessed letters and the r
     for letters in range(0, len(word)): #checks if the guessed letter its in word if its there unihides from hidden version of word the parts of that letter
         
         for character in guesses:
-          
+            
           if character==word[letters]:
             
             hiddenword[letters]=character
 
-    if "_" not in hiddenword: #checks if the word is completed 
-      
-      print ("Congratulations you managed to find the word by letter to letter guessing")
+
     
     hiddenword= ' '.join([str(elem) for elem in hiddenword]) #converts hiddenword to string
     
@@ -102,7 +109,7 @@ def mainmenu():
     
     wrongguesses=0 #stores the number of wrong guesses
     
-    word=wordgen() #stores the random word from word generator function
+    word=wordgen() #stores the random word from word generator function    
     
     word=word.upper()
     
@@ -126,28 +133,33 @@ def mainmenu():
 
     
     while True: #main loop
+        print (word)
+        
         
         print (hideword(word,guesses) +"""\t\t\t\t\t\t\t\t\t\n """+hagmanpic(wrongguesses) + "\t\n")
 
-        
-        letter=input("Guess a letter or the word: ")
+        letter=input("Guess a letter or the word: ").upper()
 
-        letter=letter.upper()
-        
-        guesses+=letter+","
-        
 
+        if letter in hideword(word,letter) and letter in guesses : #checks if the user entered a guessed letter
+          
+          print (f"You 've allready guessed {letter}")
         
         
-        if letter in word:
+        
+        elif letter in word:
+           
             print ("\t \t you guessed right \n")
 
 
         else:
+            
             print ("\t \t wrong guess \n")
 
             wrongguesses+=1
-
+        
+        guesses+=letter+"," #stores all letters user entered to call hideword function
+        
 
         if wrongguesses == 7:
           
@@ -157,10 +169,13 @@ def mainmenu():
           
           break
         
-        if letter==word:
+        
+        if letter==word or "_" not in hideword(word,guesses):
           
           print ("Congratulations! you found the word")
           
           break
+        
+
 
 mainmenu()
